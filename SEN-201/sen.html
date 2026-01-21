@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture Attendance & Note Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+            border-radius: 5px;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output {
+            margin-top: 20px;
+            background: #eee;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Lecture Attendance & Note Tracker</h2>
+
+    <input type="text" id="course" placeholder="Course Code (e.g CSC 203)">
+    <input type="text" id="topic" placeholder="Lecture Topic">
+
+    <select id="status">
+        <option value="Attended">Attended</option>
+        <option value="Missed">Missed</option>
+    </select>
+
+    <textarea id="note" placeholder="Short lecture note"></textarea>
+
+    <button onclick="addLecture()">Add Lecture</button>
+    <button onclick="viewLectures()">View Lectures</button>
+    <button onclick="attendanceSummary()">Attendance Summary</button>
+
+    <div class="output" id="output"></div>
+</div>
+
+<script>
+    let lectures = [];
+
+    function addLecture() {
+        let course = document.getElementById("course").value;
+        let topic = document.getElementById("topic").value;
+        let status = document.getElementById("status").value;
+        let note = document.getElementById("note").value;
+
+        if (course === "" || topic === "") {
+            alert("Please fill in course and topic");
+            return;
+        }
+
+        lectures.push({
+            course: course,
+            topic: topic,
+            status: status,
+            note: note
+        });
+
+        document.getElementById("output").innerHTML =
+            "Lecture record added successfully.";
+
+        document.getElementById("course").value = "";
+        document.getElementById("topic").value = "";
+        document.getElementById("note").value = "";
+    }
+
+    function viewLectures() {
+        if (lectures.length === 0) {
+            document.getElementById("output").innerHTML =
+                "No lecture records available.";
+            return;
+        }
+
+        let display = "";
+        lectures.forEach((lec, index) => {
+            display += `<b>${index + 1}. ${lec.course}</b><br>
+                        Topic: ${lec.topic}<br>
+                        Status: ${lec.status}<br>
+                        Note: ${lec.note}<br><br>`;
+        });
+
+        document.getElementById("output").innerHTML = display;
+    }
+
+    function attendanceSummary() {
+        let attended = 0;
+        let missed = 0;
+
+        lectures.forEach(lec => {
+            if (lec.status === "Attended") {
+                attended++;
+            } else {
+                missed++;
+            }
+        });
+
+        document.getElementById("output").innerHTML =
+            `Attendance Summary<br>
+             Lectures Attended: ${attended}<br>
+             Lectures Missed: ${missed}`;
+    }
+</script>
+
+</body>
+</html>
